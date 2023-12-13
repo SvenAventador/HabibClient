@@ -10,7 +10,7 @@ import {
 } from "antd";
 import {useType} from "../../state/supplier/TypeStore";
 import {useBrand} from "../../state/supplier/BrandStore";
-import Swal from "sweetalert2";
+import GoodModal from "./composition/modal/GoodModal";
 
 const SupplierGood = () => {
     const {
@@ -27,14 +27,15 @@ const SupplierGood = () => {
         getBrands
     } = useBrand()
 
+    const [open, setOpen] = React.useState(false)
     const [goods, setGoods] = React.useState([])
     const [types, setTypes] = React.useState([])
     const [brands, setBrands] = React.useState([])
+    const [oneGood, setOneGood] = React.useState(null)
 
     React.useEffect(() => {
         getAllSupplierGoods(user.id).then((data) => {
             setGoods(data)
-            console.log(data)
         })
     }, [getAllSupplierGoods, user.id])
 
@@ -88,7 +89,7 @@ const SupplierGood = () => {
             render: (companyTypeId) => {
                 const selectType = types.find((type) => type.id === companyTypeId)
                 return (
-                    <Typography>{selectType?.typeName}</Typography>
+                    <Typography>{selectType ? selectType?.typeName : 'Отсутствует' }</Typography>
                 )
             }
         },
@@ -99,7 +100,7 @@ const SupplierGood = () => {
             render: (companyBrandId) => {
                 const selectBrand = brands.find((brand) => brand.id === companyBrandId)
                 return (
-                    <Typography>{selectBrand?.brandName}</Typography>
+                    <Typography>{selectBrand ? selectBrand?.brandName : 'Отсутствует'}</Typography>
                 )
             }
         },
@@ -111,12 +112,37 @@ const SupplierGood = () => {
                     <Button style={{
                         border: 'orange 1px solid',
                         color: 'orange'
+                    }}
+                    onClick={() => {
+                        showModal(record.id)
                     }}>Изменить товар</Button>
                     <Button danger>Удалить товар</Button>
                 </Space>
             ),
         }
     ]
+
+    const handleOk = () => {
+        getAllSupplierGoods(user.id).then((data) => {
+            setGoods(data)
+        })
+        setOpen(false)
+    }
+
+    const handleCancel = () => {
+        setOpen(false)
+    }
+
+    const showModal = (goodId) => {
+        if (goodId !== null) {
+            getOneSupplierGood(goodId).then((data) => {
+                setOneGood(data)
+            })
+        } else {
+            setOneGood(null)
+        }
+        setOpen(true)
+    }
 
     return (
         <>
@@ -128,6 +154,9 @@ const SupplierGood = () => {
                        <Button style={{
                            border: 'green 1px solid',
                            color: 'green'
+                       }}
+                       onClick={() => {
+                           showModal(null)
                        }}>Добавить товар</Button>
                        <Button danger>Удалить все товары</Button>
                    </Space>
@@ -183,6 +212,10 @@ const SupplierGood = () => {
                        showSizeChanger: false
                    }}
                    columns={columns}/>
+            <GoodModal open={open}
+                       onOk={handleOk}
+                       onCancel={handleCancel}
+                       good={oneGood}/>
         </>
     );
 };
