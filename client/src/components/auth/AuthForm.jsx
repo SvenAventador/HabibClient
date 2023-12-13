@@ -29,7 +29,6 @@ import AgreementModal from "../about/AgreementModal";
 import ConfidentialModal from "../about/ConfidentialModal";
 import {useUser} from "../../state/UserStore";
 import Swal from "sweetalert2";
-import {adminRoute} from "../../routes";
 
 const AuthForm = () => {
     const isLogin = useLocation().pathname === LOGIN_ROUTE
@@ -52,7 +51,6 @@ const AuthForm = () => {
     const {
         registrationUser,
         loginUser,
-        user
     } = useUser();
 
 
@@ -188,8 +186,8 @@ const AuthForm = () => {
                         onClick={async () => {
                             if (isLogin)
                                 loginUser(email, password)
-                                    .then(() => {
-                                        switch (user.userRole) {
+                                    .then((data) => {
+                                        switch (data.userRole) {
                                             case 1:
                                                 history(MAIN_ROUTE)
                                                 break
@@ -202,6 +200,8 @@ const AuthForm = () => {
                                             case 4:
                                                 history(SUPPLIER_ROUTE)
                                                 break
+                                            default:
+                                                return null
                                         }
                                         Swal.fire({
                                             title: "Внимание",
@@ -218,13 +218,13 @@ const AuthForm = () => {
                                     });
                             else {
                                 registrationUser(name, email, password)
-                                    .then(() => {
-                                        switch (user.userRole) {
+                                    .then((data) => {
+                                        switch (data.userRole) {
                                             case 1:
                                                 history(MAIN_ROUTE)
                                                 break
                                             case 2:
-                                                history(adminRoute.path)
+                                                history(ADMIN_ROUTE)
                                                 break
                                             case 3:
                                                 history(MANAGER_ROUTE)
@@ -232,6 +232,8 @@ const AuthForm = () => {
                                             case 4:
                                                 history(SUPPLIER_ROUTE)
                                                 break
+                                            default:
+                                                return null
                                         }
                                         Swal.fire({
                                             title: "Внимание",

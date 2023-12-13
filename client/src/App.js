@@ -8,18 +8,26 @@ const App = () => {
     const [isLoading, setIsLoading] = React.useState(true)
     let {
         checkUser,
-        user
     } = useUser()
 
     React.useEffect(() => {
         setTimeout(() => {
-            checkUser().finally(() => {setIsLoading(false)})
+            checkUser()
+                .finally(() => {
+                    setIsLoading(false)
+                })
         }, 2000)
-    }, [checkUser,user])
+    }, [checkUser])
 
     if (isLoading)
     {
-        return <div className="loader">
+        return <div className={"flex"}
+                    style={{
+                        justifyContent: "center",
+                        alignItems: "center",
+                        height: 100 + "%",
+                        width: 100 + "%"
+                    }}>
             <TailSpin
                 height="100"
                 width="80"

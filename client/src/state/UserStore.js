@@ -66,17 +66,12 @@ export const useUser = create((set) => ({
             });
             return data;
         } catch (error) {
-            if (error.statusCode === 401) {
-                return null;
-            }
-
             set({
                 user: null,
                 isAuth: false,
                 error,
                 message: error.message
             });
-            throw error;
         }
     },
 

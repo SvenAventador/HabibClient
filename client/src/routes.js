@@ -26,17 +26,27 @@ export const publicRoutes = [
         Component: Main
     }
 ]
-export const adminRoute = {
-    path: ADMIN_ROUTE,
-    Component: AdminPage
-}
 
-export const managerRoute = {
-    path: MANAGER_ROUTE,
-    Component: ManagerPage
-}
+export const authRoutes = [
+]
 
-export const supplierRoute = {
-    path: SUPPLIER_ROUTE,
-    Component: SupplierPage
-}
+export const adminRoute = [
+    {
+        path: ADMIN_ROUTE,
+        Component: AdminPage
+    }
+]
+
+export const managerRoute = [
+    {
+        path: MANAGER_ROUTE,
+        Component: ManagerPage
+    }
+]
+
+export const supplierRoute = [
+    {
+        path: SUPPLIER_ROUTE,
+        Component: SupplierPage
+    }
+]
